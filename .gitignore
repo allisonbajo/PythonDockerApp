@@ -1,0 +1,5 @@
+# Byte-compiled
+__pycache__/
+
+# Python Environments
+product-service/venv/

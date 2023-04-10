@@ -1,6 +1,8 @@
 services:
   productservice:
     build: product-service
+    volumes:
+      - "./config:/config"
 
   web:
     build: nginx
@@ -14,3 +16,7 @@ services:
       - MYSQL_ROOT_PASSWORD=password
     volumes:
       - "./db/init.sql:/data/application/init.sql"
+      - "db-volume:/var/lib/mysql"
+
+volumes:
+  db-volume:
