@@ -1,22 +1,40 @@
-services:
-  productservice:
-    build: product-service
-    volumes:
-      - "./config:/config"
+networks:
+  frontend:
+  backend:
 
+secrets:
+  db_password:
+    file: db_password.txt
+
+volumes:
+  db-volume:
+
+services:
   web:
     build: nginx
     ports:
       - "80:80"
+    networks:
+      - frontend
   
+  productservice:
+    build: product-service
+    volumes:
+      - "./config:/config"
+      - "./product-service/src:/code"
+    secrets:
+      - db_password
+    networks:
+      - frontend
+      - backend
+
   db:
     image: mysql
     command: "--init-file /data/application/init.sql --default-authentication-plugin=mysql_native_password"
-    environment:
-      - MYSQL_ROOT_PASSWORD=password
+    #environment:
+      #- MYSQL_ROOT_PASSWORD=password
     volumes:
       - "./db/init.sql:/data/application/init.sql"
       - "db-volume:/var/lib/mysql"
-
-volumes:
-  db-volume:
+    networks:
+      - backend

@@ -25,7 +25,8 @@ def get_database_url():
     database_configuration = config['mysql']
     host = database_configuration['host']
     username = database_configuration['username']
-    password = database_configuration['password']
+    db_password = open('/run/secrets/db_password')
+    password = db_password.read()
     database = database_configuration['database']
     database_url = f'mysql://{username}:{password}@{host}/{database}'
     
@@ -50,6 +51,7 @@ def get_products():
         curl -v http://localhost:5000/products
     """
     log.debug('GET /products')
+    log.debug('Hello')
 
     #return jsonify(products)
 
